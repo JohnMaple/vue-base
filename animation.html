@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue中css动画原理/animate.css库</title>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="animate.css">
+    <style>
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+        }
+        .fade-enter-active, .fade-leave-active{
+            -webkit-transition: opacity 3s;
+            -moz-transition: opacity 3s;
+            -ms-transition: opacity 3s;
+            -o-transition: opacity 3s;
+            transition: opacity 3s;
+        }
+        .fade1-fade-enter-active {
+            transform-origin: left center;
+            animation: bounce-in 1s;
+        }
+        .fade1-fade-leave-active {
+            transform-origin: left center;
+            animation: bounce-in 1s reverse;
+        }
+
+        .active {
+            transform-origin: left center;
+            animation: bounce-in 2s;
+        }
+        .leave {
+            transform-origin: left center;
+            animation: bounce-in 2s reverse;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+        <transition name="fade"> // 定义类名前缀
+            <div v-show="show">Hello</div>
+        </transition>
+
+        <transition name="fade1"> // 使用css3 keyframes
+            <div v-show="show">Vue</div>
+        </transition>
+
+        <transition name="fade2" enter-active-class="active" leave-active-class="leave"> // 自定义类名
+            <div v-show="show">Define</div>
+        </transition>
+
+        <transition name="fade3" enter-active-class="animated swing" leave-active-class="animated shake"> // 使用animate.css库
+            <div v-show="show">Animate.css</div>
+        </transition>
+
+        <!--第一次刷新页面就触发-->
+        <transition name="fade" :duration="3000" type="transition" appear enter-active-class="animated swing fade-enter-active" leave-active-class="animated hinge fade-leave-active" appear-active-class="animated tada"> // 使用animate.css库
+            <div v-show="show">Animate</div>
+        </transition>
+
+        <button @click="handleClick">切换</button>
+    </div>
+    <script>
+        let app = new Vue({
+            el: '#app',
+            data: {
+                show: true,
+                animate_show: true,
+            },
+            methods: {
+                handleClick () {
+                    this.show = !this.show;
+                    this.animate_show = !this.animate_show;
+                }
+            }
+
+        })
+    </script>
+</body>
+</html>

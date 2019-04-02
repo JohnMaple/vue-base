@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>插槽（slot)</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <child>
+            <p>vue</p>
+        </child>
+
+        <container>
+            <div class="header" slot="header">header</div>
+            <div class="footer" slot="footer">footer</div>
+        </container>
+
+        <ul-slot>
+            <template slot-scope="props">
+                <li>{{props.item}}</li>
+            </template>
+        </ul-slot>
+    </div>
+    <script>
+        // 普通插槽
+        Vue.component('child', {
+            template: `<div>
+                            <p>hello</p>
+                            <slot></slot>
+                       </div>`
+        });
+
+        // 具名插槽
+        Vue.component('container', {
+            template: `<div>
+                            <slot name="header">default header</slot>
+                            <div class="content">content</div>
+                            <slot name="footer"></slot>
+                       </div>`,
+        });
+
+        // 作用域插槽
+        Vue.component('ul-slot', {
+            data () {
+                return {
+                    list: [1,2,3,4]
+                }
+            },
+            template: `<div>
+                            <ul>
+                                <slot v-for="item of list" :item="item"></slot>
+                            </ul>
+                       </div>`
+        });
+
+        let app = new Vue({
+            el: '#app',
+        })
+    </script>
+</body>
+</html>
